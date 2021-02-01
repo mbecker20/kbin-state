@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { INIT_ACTION } from "./createStore";
+import { INIT_ACTION } from "./index";
 import { ReducerBundle, RootReducer, Reducer, Action } from "../types";
 
 export function useReRender() {

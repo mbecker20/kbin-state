@@ -2,15 +2,12 @@ import { useEffect, useState } from "react"
 import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions, ThunkAction } from "../types"
 import { shallowEqualObjects } from "shallow-equal"
 import { useReRender } from "./helpers"
+import { INIT_ACTION } from "./index"
 
 const RETRY_TIME = 1000
 const LOCAL_STORE_TIMEOUT = 5000
 let timeout = false
 let timeoutQueue = false
-
-export const INIT_ACTION = {
-  type: 'INIT'
-}
 
 const DEFAULT_OPTIONS = {
   onUndo: () => {},
