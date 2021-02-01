@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions, ThunkAction } from "./types"
+import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions, ThunkAction } from "../types"
 import { shallowEqualObjects } from "shallow-equal"
-import { useReRender } from "../hooks"
+import { useReRender } from "./helpers"
 
 const RETRY_TIME = 1000
 const LOCAL_STORE_TIMEOUT = 5000

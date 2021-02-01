@@ -1,5 +1,20 @@
-import { INIT_ACTION } from "../createStore";
-import { ReducerBundle, RootReducer, Reducer, Action } from "./types";
+import { useState } from "react";
+import { INIT_ACTION } from "./createStore";
+import { ReducerBundle, RootReducer, Reducer, Action } from "../types";
+
+export function useReRender() {
+  const [, toReRender] = useState('')
+  let count = 0
+  const reRender = () => {
+    toReRender(genUpdateID(count))
+    count++
+  }
+  return reRender
+}
+
+function genUpdateID(updates: number) {
+  return `${updates}${Math.floor(Math.random() * 0xFFF).toString(16)}`
+}
 
 export function createRootReducer<RootState>(
   initState: RootState,
@@ -19,6 +34,10 @@ export function filterOutFromObj<ObjType>(obj: ObjType, idsToFilterOut: string[]
   return Object.fromEntries(Object.entries(obj).filter(entry => {
     return !stringIn(entry[0], idsToFilterOut)
   }))
+}
+
+export function stringIn(str: string, ar: any[]) {
+  return ar.includes(str)
 }
 
 export function objFrom2Arrays(keys: string[], entries: any[]) {

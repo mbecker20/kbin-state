@@ -2,9 +2,9 @@
   "name": "redo",
   "version": "1.0.0",
   "description": "a state manager with build into undo and redo functionality",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/mbecker20/redo#readme",
   "devDependencies": {
+    "@types/react": "^17.0.0",
     "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "react": "^17.0.1"
   }
 }
