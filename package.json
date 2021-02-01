@@ -4,7 +4,7 @@
   "description": "a state manager with build into undo and redo functionality",
   "main": "build/index.js",
   "scripts": {
-    "publish": "tsc && npm publish",
+    "publish-package": "tsc && npm publish",
     "build": "tsc"
   },
   "repository": {
