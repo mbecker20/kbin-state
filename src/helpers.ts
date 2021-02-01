@@ -1,5 +1,4 @@
-import { filterOutFromObj, objFrom2Arrays } from "../state/helpers";
-import { INIT_ACTION } from "./createStore";
+import { INIT_ACTION } from "../createStore";
 import { ReducerBundle, RootReducer, Reducer, Action } from "./types";
 
 export function createRootReducer<RootState>(
@@ -14,6 +13,21 @@ export function createRootReducer<RootState>(
     const subStates = keys.map(key => reducerBundle[key](state, action))
     return objFrom2Arrays(keys, subStates) as RootState
   }
+}
+
+export function filterOutFromObj<ObjType>(obj: ObjType, idsToFilterOut: string[]) {
+  return Object.fromEntries(Object.entries(obj).filter(entry => {
+    return !stringIn(entry[0], idsToFilterOut)
+  }))
+}
+
+export function objFrom2Arrays(keys: string[], entries: any[]) {
+  if (keys.length === entries.length) {
+    return Object.fromEntries(keys.map((id, index) => {
+      return [id, entries[index]]
+    }))
+  }
+  return {}
 }
 
 export function createMidReducer<RootState, SubState>(

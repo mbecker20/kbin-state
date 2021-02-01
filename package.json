@@ -1,0 +1,22 @@
+{
+  "name": "redo",
+  "version": "1.0.0",
+  "description": "a state manager with build into undo and redo functionality",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbecker20/redo.git"
+  },
+  "author": "mbecker20",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbecker20/redo/issues"
+  },
+  "homepage": "https://github.com/mbecker20/redo#readme",
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}
