@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions, ThunkAction } from "../types"
+import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions, ThunkAction } from "./index"
 import { shallowEqualObjects } from "shallow-equal"
 import { useReRender } from "./helpers"
 import { INIT_ACTION } from "./index"

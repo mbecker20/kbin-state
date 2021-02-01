@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Action, DispatchEvent, StaticEffects, Initializer, RootReducer, Selector, StaticStore, StaticStoreOptions, ThunkAction } from "../types"
+import { Action, DispatchEvent, StaticEffects, Initializer, RootReducer, Selector, StaticStore, StaticStoreOptions, ThunkAction } from "./index"
 import { shallowEqualObjects } from "shallow-equal"
 import { useReRender } from "./helpers"
 
@@ -13,7 +13,7 @@ export const INIT_ACTION = {
 }
 
 const DEFAULT_OPTIONS = {
-  log: false,
+  log: false,/*  */
   useLocalStorage: false,
   localStorageKey: 'redo-state'
 }
