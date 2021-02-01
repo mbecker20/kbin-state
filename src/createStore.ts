@@ -16,9 +16,8 @@ const DEFAULT_OPTIONS = {
   onUndo: () => {},
   onRedo: () => {},
   log: false,
-  useLocalStorage: false, // to store the most current state in local storage
-  historyKey: 'redo-state',
-  useUndoRedo: true
+  useLocalStorage: false,
+  localStorageKey: 'redo-state'
 }
 
 function createStore<RootState>( 
@@ -28,9 +27,9 @@ function createStore<RootState>(
   options?: StoreOptions
 ) {
   const { 
-    onUndo, onRedo, log, 
+    onUndo, onRedo, log,
     useLocalStorage,
-    historyKey, useUndoRedo
+    localStorageKey
   } = Object.assign(
     {}, DEFAULT_OPTIONS, options
   )
@@ -57,17 +56,15 @@ function createStore<RootState>(
     store.acknowledged = true
   })
 
-  if (useUndoRedo) {
-    window.addEventListener('keydown', e => {
-      if (e.metaKey && e.key === 'z') {
-        if (e.shiftKey) {
-          redo()
-        } else {
-          undo()
-        }
+  window.addEventListener('keydown', e => {
+    if (e.metaKey && e.key === 'z') {
+      if (e.shiftKey) {
+        redo()
+      } else {
+        undo()
       }
-    })
-  }
+    }
+  })
   
   function getState() {
     return store.history[store.historyIndex]
@@ -80,7 +77,7 @@ function createStore<RootState>(
   }
 
   function resetState() {
-    const prevState = store.history[store.history.length - 1]
+    const prevState = getState()
     store.history = [initState]
     store.actionHistory = [INIT_ACTION]
     store.historyIndex = 0
@@ -93,7 +90,7 @@ function createStore<RootState>(
   }
 
   async function reInitialize(force?: boolean) {
-    const prevState = store.history[store.history.length - 1] as RootState
+    const prevState = getState()
     if (initializer) {
       await initializer(prevState, force ? true : false).then(nextState => {
         store.history = [nextState]
@@ -110,7 +107,7 @@ function createStore<RootState>(
   }
 
   function retrieveLocalHistory() {
-    const restore = window.localStorage.getItem(historyKey)
+    const restore = window.localStorage.getItem(localStorageKey)
     if (
       restore && restore !== 'undefined'
     ) {
@@ -121,7 +118,7 @@ function createStore<RootState>(
   function updateLocalHistory() {
     if (!timeout) {
       window.localStorage.setItem(
-        historyKey, JSON.stringify(store.history[store.history.length - 1])
+        localStorageKey, JSON.stringify(getState())
       )
       timeout = true
       window.setTimeout(() => { timeout = false }, LOCAL_STORE_TIMEOUT)
@@ -147,7 +144,7 @@ function createStore<RootState>(
       store.historyIndex++
       forwardEffect(true)
       if (useLocalStorage) updateLocalHistory()
-      if (log) console.log(store.historyIndex)
+      if (log) console.log(`history index: ${store.historyIndex}`)
       window.dispatchEvent(new CustomEvent<DispatchEvent<RootState>>('dispatch', {
         detail: {
           prevState: getPrevState(),
@@ -217,7 +214,7 @@ function createStore<RootState>(
       if (useLocalStorage) updateLocalHistory()
       if (log) {
         console.log('undo')
-        console.log(store.historyIndex)
+        console.log(`history index: ${store.historyIndex}`)
       } 
     }
   }
@@ -236,7 +233,7 @@ function createStore<RootState>(
       if (useLocalStorage) updateLocalHistory()
       if (log) {
         console.log('redo')
-        console.log(store.historyIndex)
+        console.log(`history index: ${store.historyIndex}`)
       }
     }
   }

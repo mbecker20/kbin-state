@@ -11,13 +11,24 @@ export type Store<RootState> = {
   acknowledged: boolean
 }
 
+export type StaticStore<RootState> = {
+  state: RootState
+  initialized: boolean
+  acknowledged: boolean
+}
+
 export type StoreOptions = {
   onUndo?: () => void
   onRedo?: () => void
   log?: boolean
   useLocalStorage?: boolean
-  historyKey?: string
-  useUndoRedo?: boolean
+  localStorageKey?: string
+}
+
+export type StaticStoreOptions = {
+  log?: boolean
+  useLocalStorage?: boolean
+  localStorageKey?: string
 }
 
 export type ThunkAction = (dispatch: Dispatch) => Promise<any | void>
@@ -49,4 +60,8 @@ export type Effect<RootState> = {
 
 export interface Effects<RootState> {
   [index: string]: Effect<RootState>
+}
+
+export interface StaticEffects<RootState> {
+  [index: string]: (state: RootState, effectData: any) => void
 }

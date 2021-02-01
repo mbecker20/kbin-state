@@ -1,5 +1,5 @@
 {
-  "name": "redo",
+  "name": "redo-state",
   "version": "1.0.0",
   "description": "a state manager with build into undo and redo functionality",
   "main": "build/index.js",
