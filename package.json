@@ -1,6 +1,6 @@
 {
   "name": "kbin-state",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a state manager with build into undo and redo functionality",
   "main": "build/index.js",
   "scripts": {
