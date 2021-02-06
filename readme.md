@@ -1,4 +1,4 @@
-## redo
+## kbin-state
 
 This is a simple state manage for react apps. I'm making it
 because redux, even with redux-thunk, is not behaving as well as I would like
