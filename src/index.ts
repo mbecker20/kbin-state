@@ -1,6 +1,7 @@
 export { default as createStore } from './createStore'
 export { default as createStaticStore } from './createStaticStore'
 export {
+  stringIn,
   useReRender,
   genUpdateID,
   filterOutFromObj,
