@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mbecker20/redo.git"
+    "url": "git+https://github.com/mbecker20/kbin-state.git"
   },
   "author": "mbecker20",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mbecker20/redo/issues"
+    "url": "https://github.com/mbecker20/kbin-state/issues"
   },
-  "homepage": "https://github.com/mbecker20/redo#readme",
+  "homepage": "https://github.com/mbecker20/kbin-state#readme",
   "devDependencies": {
     "@types/react": "^17.0.1",
     "typescript": "^4.1.3"
