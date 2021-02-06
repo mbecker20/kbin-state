@@ -1,6 +1,21 @@
 export { default as createStore } from './createStore'
 export { default as createStaticStore } from './createStaticStore'
-export * from './helpers'
+export {
+  useReRender,
+  genUpdateID,
+  filterOutFromObj,
+  objFrom2Arrays,
+  keepOnlyIdsInObj,
+  objectLength,
+  mergeNullableIntoUpdate,
+  createRootReducer,
+  createMidReducer,
+  createCreateReducer,
+  createDeleteReducer,
+  createMultiPushReducer,
+  createPushReducer,
+  createUpdateReducer
+} from './helpers'
 
 export const INIT_ACTION = {
   type: 'INIT'

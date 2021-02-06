@@ -12,8 +12,29 @@ export function useReRender() {
   return reRender
 }
 
-function genUpdateID(updates: number) {
+export function genUpdateID(updates: number) {
   return `${updates}${Math.floor(Math.random() * 0xFFF).toString(16)}`
+}
+
+export function keepOnlyIdsInObj<ObjType>(obj: ObjType, idsToKeep: string[]) {
+  return Object.fromEntries(Object.entries(obj).filter(entry => {
+    return stringIn(entry[0], idsToKeep)
+  }))
+}
+
+export function objectLength(obj: any) {
+  return Object.keys(obj).length
+}
+
+export function mergeNullableIntoUpdate(nullableProps: any) {
+  const propsToMerge = Object.keys(nullableProps).filter(prop => {
+    return nullableProps[prop] ? true : false
+  }).map(prop => {
+    return {
+      [prop]: nullableProps[prop]
+    }
+  })
+  return Object.assign({}, ...propsToMerge)
 }
 
 export function createRootReducer<RootState>(

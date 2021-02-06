@@ -3,14 +3,11 @@
   "display": "Node 12",
   "compilerOptions": {
     "lib": [
-      "es2019",
-      "es2020.promise",
-      "es2020.bigint",
-      "es2020.string",
+      "ESNext",
       "DOM"
     ],
-    "module": "commonjs",
-    "target": "es2019",
+    "module": "ESNext",
+    "target": "ESNext",
     "declaration": true,
     "strict": true,
     "allowJs": true,
