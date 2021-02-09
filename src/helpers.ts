@@ -107,6 +107,13 @@ export function createDeleteReducer<RootState, SubState>(
   }
 }
 
+/**
+ * note that the same action can have multiple pushs required for different subkeys,
+ * so the action takes the pushIDs and toPush objects relative to the subKey
+ * action must have pushIDs = { subKey1: id1, ... } and toPush = { subKey1: anyToPush, ... }
+ * @param subKey the key of the root field the reducer returns
+ * @param arrayProp the key of the array of the reducer return object type
+ */
 export function createPushReducer<RootState, SubState>(
   subKey: string, arrayProp: string
 ): Reducer<RootState, SubState> {
