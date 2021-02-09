@@ -15,6 +15,8 @@ export {
   createDeleteReducer,
   createMultiPushReducer,
   createPushReducer,
+  createPullReducer,
+  createMultiPullReducer,
   createUpdateReducer
 } from './helpers'
 
