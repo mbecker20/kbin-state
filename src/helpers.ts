@@ -143,6 +143,29 @@ export function createPushReducer<RootState, SubState>(
 }
 
 /**
+ * 
+ * @param subKey the key of the root field the reducer returns
+ * @param arrayProp the key of the array of the reducer return object type to pull from
+ * @param toPullIDActionKey the key of the id to pull from. given by the action (id = action[toPullIDActionKey])
+ * @param toPullActionKey to key of whatever is being pulled. given by the action (toPull = action[toPullActionKey])
+ */
+export function createPullReducer<RootState, SubState>(
+  subKey: string, arrayProp: string, toPullIDActionKey: string, toPullActionKey: string
+): Reducer<RootState, SubState> {
+  return (state: any, action: any) => {
+    return {
+      ...state[subKey],
+      [action[toPullIDActionKey]]: {
+        ...state[subKey][action[toPullIDActionKey]],
+        [arrayProp]: (state[subKey][action[toPullIDActionKey]][arrayProp] as any[]).filter(prop => {
+          return prop !== action[toPullActionKey]
+        })
+      }
+    }
+  }
+}
+
+/**
  * note that the same action can have multiple push reducers required for different subkeys
  * the id to push to must be given in the action, keyed at toPushIDActionKey
  * the items to push must be given in the action, with keys in toPushActionKeys in the same order
@@ -169,6 +192,35 @@ export function createMultiPushReducer<RootState, SubState>(
         ...update
       }
     } as SubState
+  }
+}
+
+/**
+ * 
+ * @param subKey the key of the root field the reducer returns
+ * @param arrayProps the keys of the arrays of the reducer return object type to pull from
+ * @param toPullIDActionKey the key of the id to pull from. given by the action (id = action[toPullIDActionKey])
+ * @param toPullActionKeys to keys of whatever is being pulled. correlated with order of arrayProps. given by the action (toPull = action[toPullActionKeys[i]])
+ * @returns the multi pull reducer
+ */
+export function createMultiPullReducer<RootState, SubState>(
+  subKey: string, arrayProps: string[], toPullIDActionKey: string, toPullActionKeys: string[]
+): Reducer<RootState, SubState> {
+  return (state: any, action: any) => {
+    const update = objFrom2Arrays(
+      arrayProps, arrayProps.map((arrayProp, i) => (
+        state[subKey][action[toPullIDActionKey]][arrayProp].filter(prop => {
+          prop !== action[toPullActionKeys[i]]
+        })
+      ))
+    )
+    return {
+      ...state[subKey],
+      [action[toPullIDActionKey]]: {
+        ...state[subKey][action[toPullIDActionKey]],
+        ...update
+      }
+    }
   }
 }
 
