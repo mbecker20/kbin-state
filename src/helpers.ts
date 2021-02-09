@@ -84,71 +84,105 @@ export function createMidReducer<RootState, SubState>(
   }
 }
 
+/**
+ * 
+ * @param subKey the key of the root field the reducer returns
+ * @param propsToUpdate the keys of the fields to update
+ * @param toUpdateIDActionKey the key in given action containing the id the update
+ * @param propsToUpdateActionKeys the keys in given action containing the updated props. order corresponds to propsToUpdate
+ */
 export function createUpdateReducer<RootState, SubState>(
-  subKey: string, props: string[], // update action must have id, and data at same key as in state
+  subKey: string, propsToUpdate: string[], toUpdateIDActionKey: string, propsToUpdateActionKeys: string[]
 ): Reducer<RootState, SubState> {
   return (state: any, action: any) => {
-    const update = objFrom2Arrays(props, props.map(prop => action[prop]))
+    const update = objFrom2Arrays(propsToUpdate, propsToUpdate.map((prop, i) => action[propsToUpdateActionKeys[i]]))
     return {
       ...state[subKey],
-      [action.id]: {
-        ...state[subKey][action.id],
+      [action[toUpdateIDActionKey]]: {
+        ...state[subKey][action[toUpdateIDActionKey]],
         ...update
       }
     }
   }
 }
 
+/**
+ * @param subKey the key of the root field the reducer returns
+ * @param toDeleteIDActionKey the key in given action containing the id to delete
+ * @returns the delete reducer
+ */
 export function createDeleteReducer<RootState, SubState>(
-  subKey: string
+  subKey: string, toDeleteIDActionKey: string
 ): Reducer<RootState, SubState> {
-  return (state: any, { id }: any) => {
-    return filterOutFromObj(state[subKey], [id]) as SubState
+  return (state: any, action: any) => {
+    return filterOutFromObj(state[subKey], [action[toDeleteIDActionKey]]) as SubState
   }
 }
 
 /**
- * note that the same action can have multiple pushs required for different subkeys,
- * so the action takes the pushIDs and toPush objects relative to the subKey
- * action must have pushIDs = { subKey1: id1, ... } and toPush = { subKey1: anyToPush, ... }
+ * note that the same action can have multiple push reducers required for different subkeys
+ * the id to push to must be given in the action, keyed at toPushIDActionKey
+ * the item to push must be given in the action, keyed at toPushActionKey
  * @param subKey the key of the root field the reducer returns
- * @param arrayProp the key of the array of the reducer return object type
+ * @param arrayProp the key of the array of the reducer return object type to push to
+ * @param toPushIDActionKey the key of the id to push to. given by the action (id = action[toPushIDActionKey])
+ * @param toPushActionKey to key of whatever is being pushed. given by the action (toPush = action[toPushActionKey]) 
  */
 export function createPushReducer<RootState, SubState>(
-  subKey: string, arrayProp: string
+  subKey: string, arrayProp: string, toPushIDActionKey: string, toPushActionKey: string
 ): Reducer<RootState, SubState> {
-  return (state: any, { pushIDs, toPush }: any) => {
+  return (state: any, action: any) => {
     return {
       ...state[subKey],
-      [pushIDs[subKey]]: {
-        ...state[subKey][pushIDs[subKey]],
-        [arrayProp]: [...state[subKey][pushIDs[subKey]][arrayProp], toPush[subKey]]
+      [action[toPushIDActionKey]]: {
+        ...state[subKey][action[toPushIDActionKey]],
+        [arrayProp]: [...state[subKey][action[toPushIDActionKey]][arrayProp], action[toPushActionKey]]
       }
     } as SubState
   }
 }
 
+/**
+ * note that the same action can have multiple push reducers required for different subkeys
+ * the id to push to must be given in the action, keyed at toPushIDActionKey
+ * the items to push must be given in the action, with keys in toPushActionKeys in the same order
+ * as the props to push to given in arrayProps
+ * @param subKey the key of the root field the reducer returns
+ * @param arrayProps the keys of the arrays of the reducer return object type to push to
+ * @param toPushIDActionKey the key of the id to push to. given by the action (id = action[toPushIDActionKey])
+ * @param toPushActionKey to key of whatever is being pushed. given by the action (toPush = action[toPushActionKey])
+ * @returns the multi push reducer
+ */
 export function createMultiPushReducer<RootState, SubState>(
-  subKey: string, arrayProps: string[]
+  subKey: string, arrayProps: string[], toPushIDActionKey: string, toPushActionKeys: string[]
 ): Reducer<RootState, SubState> {
-  return (state: any, { pushID, toPushObj }: any) => {
+  return (state: any, action: any) => {
     const update = objFrom2Arrays(
-      arrayProps, arrayProps.map(arrayProp => [...state[subKey][pushID][arrayProp], toPushObj[arrayProp]])
+      arrayProps, arrayProps.map((arrayProp, i) => (
+        [...state[subKey][action[toPushIDActionKey]][arrayProp], action[toPushActionKeys[i]]]
+      ))
     )
     return {
       ...state[subKey],
-      [pushID]: {
-        ...state[subKey][pushID],
+      [action[toPushIDActionKey]]: {
+        ...state[subKey][action[toPushIDActionKey]],
         ...update
       }
     } as SubState
   }
 }
 
+/**
+ * returns a create reducer
+ * @param subKey the key of the root field the reducer returns
+ * @param toCreateIDActionKey the key of given action containing the id to create
+ * @param toCreateActionKey the key of given action containing the object to create at id
+ * @returns the create reducer
+ */
 export function createCreateReducer<RootState, SubState>(
-  subKey: string
+  subKey: string, toCreateIDActionKey: string, toCreateActionKey: string
 ): Reducer<RootState, SubState> {
-  return (state: any, { toCreate }: any) => {
-    return { ...state[subKey], [toCreate._id]: toCreate }
+  return (state: any, action: any) => {
+    return { ...state[subKey], [action[toCreateIDActionKey]]: action[toCreateActionKey] }
   }
 }
