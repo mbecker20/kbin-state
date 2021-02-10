@@ -85,7 +85,20 @@ export function createMidReducer<RootState, SubState>(
 }
 
 /**
- * 
+ * @param subKey the key of the root field the reducer returns
+ * @param toCreateIDActionKey the key of given action containing the id to create
+ * @param toCreateActionKey the key of given action containing the object to create at id
+ * @returns the create reducer
+ */
+export function createCreateReducer<RootState, SubState>(
+  subKey: string, toCreateIDActionKey: string, toCreateActionKey: string
+): Reducer<RootState, SubState> {
+  return (state: any, action: any) => {
+    return { ...state[subKey], [action[toCreateIDActionKey]]: action[toCreateActionKey] }
+  }
+}
+
+/**
  * @param subKey the key of the root field the reducer returns
  * @param propsToUpdate the keys of the fields to update
  * @param toUpdateIDActionKey the key in given action containing the id the update
@@ -225,17 +238,16 @@ export function createMultiPullReducer<RootState, SubState>(
 }
 
 /**
- * returns a create reducer
  * @param subKey the key of the root field the reducer returns
- * @param toCreateIDActionKey the key of given action containing the id to create
- * @param toCreateActionKey the key of given action containing the object to create at id
- * @returns the create reducer
+ * @param toReplaceIDActionKey the key of given action containing the id to replace
+ * @param toReplaceActionKey the key of given action containing the object to replace at id
+ * @returns the replace reducer
  */
-export function createCreateReducer<RootState, SubState>(
-  subKey: string, toCreateIDActionKey: string, toCreateActionKey: string
-): Reducer<RootState, SubState> {
+export function createReplaceReducer<RootState, SubState>(
+  subKey: string, toReplaceIDActionKey: string, toReplaceActionKey: string
+) {
   return (state: any, action: any) => {
-    return { ...state[subKey], [action[toCreateIDActionKey]]: action[toCreateActionKey] }
+    return { ...state[subKey], [action[toReplaceIDActionKey]]: action[toReplaceActionKey] }
   }
 }
 
