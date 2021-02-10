@@ -238,3 +238,14 @@ export function createCreateReducer<RootState, SubState>(
     return { ...state[subKey], [action[toCreateIDActionKey]]: action[toCreateActionKey] }
   }
 }
+
+/**
+ * @param actionTypes array of action types for the reducer to be used for
+ * @param reducer the reducer to use for the actions
+ * @returns a reducer bundle. { [index: string]: reducer }
+ */
+export function createSingleReducerBundle<RootState, SubState>(
+  actionTypes: string[], reducer: Reducer<RootState, SubState>
+): ReducerBundle<RootState, SubState> {
+  return objFrom2Arrays(actionTypes, actionTypes.map(() => reducer))
+}
