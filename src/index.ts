@@ -17,7 +17,9 @@ export {
   createPushReducer,
   createPullReducer,
   createMultiPullReducer,
-  createUpdateReducer
+  createUpdateReducer,
+  createReplaceReducer,
+  createSingleReducerBundle
 } from './helpers'
 
 export const INIT_ACTION = {
