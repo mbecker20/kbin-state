@@ -30,16 +30,17 @@ function createStaticStore<RootState>(
   } = Object.assign(
     {}, DEFAULT_OPTIONS, options
   )
-  const initState = reducer()
+  const _initState = reducer()
   const store: StaticStore<RootState> = {
     initialized: false,
     acknowledged: false,
-    state: initState,
+    state: _initState,
+    initState: _initState
   }
 
   if (useLocalStorage) retrieveLocalHistory()
 
-  if (initializer) initializer(initState, true).then(_initState => {
+  if (initializer) initializer(store.initState, true).then(_initState => {
     if (log) console.log('initializer resolved')
     store.state = _initState
     store.initialized = true
@@ -53,11 +54,11 @@ function createStaticStore<RootState>(
 
   function resetState() {
     const prevState = store.state
-    store.state = initState
+    store.state = store.initState
     window.dispatchEvent(new CustomEvent<DispatchEvent<RootState>>('dispatch', {
       detail: {
         prevState,
-        nextState: initState,
+        nextState: store.initState,
       }
     }))
   }
@@ -65,7 +66,7 @@ function createStaticStore<RootState>(
   async function reInitialize(force?: boolean) {
     const prevState = store.state as RootState
     if (initializer) {
-      await initializer(prevState, force ? true : false).then(nextState => {
+      await initializer(store.initState, force ? true : false).then(nextState => {
         store.state = nextState
         window.dispatchEvent(new CustomEvent<DispatchEvent<RootState>>('dispatch', {
           detail: {

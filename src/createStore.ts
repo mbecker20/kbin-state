@@ -30,20 +30,21 @@ function createStore<RootState>(
   } = Object.assign(
     {}, DEFAULT_OPTIONS, options
   )
-  const initState = reducer()
+  const _initState = reducer()
   const store: Store<RootState> = {
     initialized: false,
     acknowledged: false,
-    history: [initState],
+    history: [_initState],
     actionHistory: [INIT_ACTION], // history of the action types
     historyIndex: 0, // ie store.state = store.history[store.historyIndex]
+    initState: _initState
   }
 
   if (useLocalStorage) retrieveLocalHistory()
 
-  if (initializer) initializer(initState, true).then(_initState => {
+  if (initializer) initializer(store.initState, true).then(initState => {
     if (log) console.log('initializer resolved')
-    store.history = [...store.history.slice(0, store.history.length - 1), _initState]
+    store.history = [...store.history.slice(0, store.history.length - 1), initState]
     store.initialized = true
     broadcastInitialized()
   })
@@ -75,13 +76,13 @@ function createStore<RootState>(
 
   function resetState() {
     const prevState = getState()
-    store.history = [initState]
+    store.history = [store.initState]
     store.actionHistory = [INIT_ACTION]
     store.historyIndex = 0
     window.dispatchEvent(new CustomEvent<DispatchEvent<RootState>>('dispatch', {
       detail: {
         prevState,
-        nextState: initState,
+        nextState: store.initState,
       }
     }))
   }

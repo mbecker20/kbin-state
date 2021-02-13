@@ -37,12 +37,14 @@ export type Store<RootState> = {
   historyIndex: number
   initialized: boolean
   acknowledged: boolean
+  initState: RootState
 }
 
 export type StaticStore<RootState> = {
   state: RootState
   initialized: boolean
   acknowledged: boolean
+  initState: RootState
 }
 
 export type StoreOptions = {
