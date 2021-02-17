@@ -251,6 +251,14 @@ export function createReplaceReducer<RootState, SubState>(
   }
 }
 
+export function createMergeReducer<RootState, SubState>(
+  subKey: string, toMergeIDActionKey: string, toMergeActionKey: string
+) {
+  return (state: any, action: any) => {
+    return { ...state[subKey], [action[toMergeIDActionKey]]: { ...state[subKey][action[toMergeIDActionKey]], ...action[toMergeActionKey] } }
+  }
+}
+
 /**
  * @param actionTypes array of action types for the reducer to be used for
  * @param reducer the reducer to use for the actions

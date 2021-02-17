@@ -18,6 +18,7 @@ export {
   createPullReducer,
   createMultiPullReducer,
   createUpdateReducer,
+  createMergeReducer,
   createReplaceReducer,
   createSingleReducerBundle
 } from './helpers'
