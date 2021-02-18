@@ -269,3 +269,23 @@ export function createSingleReducerBundle<RootState, SubState>(
 ): ReducerBundle<RootState, SubState> {
   return objFrom2Arrays(actionTypes, actionTypes.map(() => reducer))
 }
+
+/**
+ * @param str1 the source string
+ * @param str2 the target string.
+ * @returns true if source string is contained anywhere within target string
+ */
+export function roughStringsEqual(str1: string, str2: string) {
+  return roughStringsEqualRec(str1.toLowerCase(), str2.toLowerCase())
+}
+
+function roughStringsEqualRec(str1: string, str2: string): boolean {
+  // assume str1 is shorter, or else false
+  if (str1.length > str2.length) {
+    return false
+  } else if (str1 === str2.slice(0, str1.length)) {
+    return true
+  } else {
+    return roughStringsEqualRec(str1, str2.slice(1, str2.length))
+  }
+}

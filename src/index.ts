@@ -2,6 +2,7 @@ export { default as createStore } from './createStore'
 export { default as createStaticStore } from './createStaticStore'
 export {
   stringIn,
+  roughStringsEqual,
   useReRender,
   genUpdateID,
   filterOutFromObj,
@@ -20,7 +21,7 @@ export {
   createUpdateReducer,
   createMergeReducer,
   createReplaceReducer,
-  createSingleReducerBundle
+  createSingleReducerBundle,
 } from './helpers'
 
 export const INIT_ACTION = {
