@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { INIT_ACTION } from "./index";
+import { DynamicReducerConfig, INIT_ACTION } from "./index";
 import { ReducerBundle, RootReducer, Reducer, Action } from "./index";
 
 export function useReRender() {
@@ -256,6 +256,50 @@ export function createMergeReducer<RootState, SubState>(
 ) {
   return (state: any, action: any) => {
     return { ...state[subKey], [action[toMergeIDActionKey]]: { ...state[subKey][action[toMergeIDActionKey]], ...action[toMergeActionKey] } }
+  }
+}
+
+export function createDynamicReducer<RootState, SubState>(
+  subKey: string, config: DynamicReducerConfig
+) {
+  return (state: any, action: any) => {
+    return Object.assign(
+      {}, state[subKey],
+      config.create ? {
+        [action[config.create[0]]]: action[config.create[1]]
+      } : {},
+      config.delete ? {
+        [action[config.delete[0]]]: undefined
+      } : {},
+      config.replace ? {
+        [action[config.replace[0]]]: action[config.replace[1]]
+      } : {},
+      config.idActionKey ? {
+        [action[config.idActionKey]]: Object.assign(
+          {}, state[subKey][action[config.idActionKey]],
+          config.merge ? action[config.merge[0]] : {},
+          config.update ? objFrom2Arrays(
+            config.update[0], config.update[1].map(actionKey => action[actionKey])
+          ) : {},
+          config.push ? {
+            [config.push[0]]: [...state[subKey][action[config.idActionKey]][config.push[0]], action[config.push[1]]]
+          } : {},
+          config.pull ? {
+            [config.pull[0]]: state[subKey][action[config.idActionKey]][config.pull[0]].filter(item => item !== action[(config as any).pull[1]])
+          } : {},
+          config.multiPush ? objFrom2Arrays(
+            config.multiPush[0], config.multiPush[1].map((actionKey, i) => 
+              [...state[subKey][action[(config as any).idActionKey]][(config as any).multiPush[0][i]], action[actionKey]]
+            )
+          ) : {},
+          config.multiPull ? objFrom2Arrays(
+            config.multiPull[0], config.multiPull[1].map((actionKey, i) =>
+              state[subKey][action[(config as any).idActionKey]][(config as any).multiPush[0][i]].filter(item => item !== action[actionKey])
+            )
+          ) : {},
+        )
+      } : {}
+    )
   }
 }
 

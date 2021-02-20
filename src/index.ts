@@ -97,3 +97,16 @@ export interface Effects<RootState> {
 export interface StaticEffects<RootState> {
   [index: string]: (state: RootState, effectData: any) => void
 }
+
+export type DynamicReducerConfig = {
+  replace?: [toReplaceIDActionKey: string, toReplaceActionKey: string]
+  create?: [toCreateIDActionKey: string, toCreateActionKey: string]
+  delete?: [toDeleteIDActionKey: string]
+  idActionKey?: string
+  update?: [propsToUpdate: string[], propsToUpdateActionKeys: string[]]
+  push?: [arrayProp: string, toPushActionKey: string]
+  pull?: [arrayProp: string, toPullActionKey: string]
+  multiPush?: [arrayProps: string[], toPushActionKeys: string[]]
+  multiPull?: [arrayProps: string[], toPullActionKeys: string[]]
+  merge?: [toMergeActionKey: string]
+}
