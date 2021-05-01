@@ -103,7 +103,7 @@ function createStaticStore<RootState>(
     }
   }
 
-  function dispatch(action: Action | ThunkAction) {
+  function dispatch(action: Action & any | ThunkAction) {
     if (typeof (action) === 'function') {
       return action(dispatch)
     } else {
