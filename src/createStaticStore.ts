@@ -156,6 +156,19 @@ function createStaticStore<RootState>(
     return selector(store.state)
   }
 
+  function useFullSelector() {
+    const rerender = useReRender()
+    const listener = () => rerender()
+    useEffect(() => {
+      window.addEventListener('dispatch', listener as any)
+      return () => {
+        window.removeEventListener('dispatch', listener as any)
+      }
+    }, [])
+
+    return store.state
+  }
+
   function useIsInitialized(onInitialized?: () => void) {
     const [initialized, setInitialized] = useState(false)
     useEffect(() => {
@@ -178,6 +191,7 @@ function createStaticStore<RootState>(
     store,
     dispatch,
     useSelector,
+    useFullSelector,
     select,
     useIsInitialized,
     resetState,

@@ -261,6 +261,18 @@ function createStore<RootState>(
     return selector(getState())
   }
 
+  function useFullSelector() {
+    const rerender = useReRender()
+    const listener = () => rerender()
+    useEffect(() => {
+      window.addEventListener('dispatch', listener as any)
+      return () => {
+        window.removeEventListener('dispatch', listener as any)
+      }
+    }, [])
+    return getState()
+  }
+
   function useIsInitialized(onInitialized?: () => void) {
     const [initialized, setInitialized] = useState(false)
     useEffect(() => {
@@ -283,6 +295,7 @@ function createStore<RootState>(
     store,
     dispatch,
     useSelector,
+    useFullSelector,
     select,
     useIsInitialized,
     undo, redo,
