@@ -70,6 +70,10 @@ export function objFrom2Arrays(keys: string[], entries: any[]) {
   return {}
 }
 
+export function arrToKeyedObject<T>(arr: any[], keyField: string): { [key: string]: T } {
+  return Object.fromEntries(arr.map(obj => [obj[keyField], obj]))
+}
+
 export function createMidReducer<RootState, SubState>(
   key: string, reducerBundle: ReducerBundle<RootState, SubState>
 ): Reducer<RootState, SubState> {
