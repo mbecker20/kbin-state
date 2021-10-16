@@ -179,6 +179,27 @@ export function createPullReducer<RootState, SubState>(
 }
 
 /**
+ * 
+ * @param subKey the key of the root field the reducer returns
+ * @param arrayProp the key of the array of the reducer return object type to pull from
+ * @param toPullActionKey to key of whatever is being pulled. given by the action (toPull = action[toPullActionKey])
+ * @summary reducer to pull all instances of given value from array at given subfield
+ */
+export function createPullFromAllReducer<RootState, SubState>(
+  subKey: string, arrayProp: string, toPullActionKey: string
+): Reducer<RootState, SubState> {
+  return (state: any, action: any) => {
+    return objFrom2Arrays(
+      Object.keys(state[subKey]),
+      Object.values(state[subKey]).map((value: any) => ({
+        ...value,
+        [arrayProp]: value[arrayProp].filter(entry => entry !== action[toPullActionKey])
+      }))
+    ) as SubState
+  }
+}
+
+/**
  * note that the same action can have multiple push reducers required for different subkeys
  * the id to push to must be given in the action, keyed at toPushIDActionKey
  * the items to push must be given in the action, with keys in toPushActionKeys in the same order
