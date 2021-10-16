@@ -97,7 +97,7 @@ export interface Effects<RootState> {
 }
 
 export interface StaticEffects<RootState> {
-  [index: string]: (state: RootState, effectData: any) => void
+  [index: string]: (state: RootState, action: any) => void
 }
 
 export type DynamicReducerConfig = {
