@@ -17,11 +17,13 @@ export {
   createMultiPushReducer,
   createPushReducer,
   createPullReducer,
+  createPullFromAllReducer,
   createMultiPullReducer,
   createUpdateReducer,
   createMergeReducer,
   createReplaceReducer,
   createSingleReducerBundle,
+  createDynamicReducer,
 } from './helpers'
 
 export const INIT_ACTION = {
