@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Action, DispatchEvent, StaticEffects, Initializer, RootReducer, Selector, StaticStore, StaticStoreOptions, ThunkAction } from "./index"
+import { Action, DispatchEvent, StaticEffects, Initializer, RootReducer, Selector, StaticStore, StaticStoreOptions } from "./index"
 import { shallowEqualObjects } from "shallow-equal"
 import { useReRender } from "./helpers"
 
@@ -103,22 +103,22 @@ function createStaticStore<RootState>(
     }
   }
 
-  function dispatch(action: Action & any | ThunkAction) {
-    if (typeof (action) === 'function') {
-      return action(dispatch)
-    } else {
-      if (log) console.log(`dispatching ${action.type}`)
-      const prevState = store.state
-      store.state = reducer(store.state, action)
-      forwardEffect(action)
-      if (useLocalStorage) updateLocalHistory()
-      if (log) console.log(`dipatch: ${action.type}`)
-      window.dispatchEvent(new CustomEvent<DispatchEvent<RootState>>('dispatch', {
-        detail: {
-          prevState,
-          nextState: store.state,
-        }
-      }))
+  function dispatch(action?: Action & any) {
+    if (action) {
+      if (log) console.log(`dispatching ${action.type}`);
+      const prevState = store.state;
+      store.state = reducer(store.state, action);
+      forwardEffect(action);
+      if (useLocalStorage) updateLocalHistory();
+      if (log) console.log(`dipatch: ${action.type}`);
+      window.dispatchEvent(
+        new CustomEvent<DispatchEvent<RootState>>("dispatch", {
+          detail: {
+            prevState,
+            nextState: store.state,
+          },
+        })
+      );
     }
   }
 

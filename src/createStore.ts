@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions, ThunkAction } from "./index"
+import { Action, DispatchEvent, Effects, Initializer, RootReducer, Selector, Store, StoreOptions } from "./index"
 import { shallowEqualObjects } from "shallow-equal"
 import { useReRender } from "./helpers"
 import { INIT_ACTION } from "./index"
@@ -129,26 +129,33 @@ function createStore<RootState>(
     }
   }
 
-  function dispatch(action: Action | ThunkAction) {
-    if (typeof (action) === 'function') {
-      return action(dispatch)
-    } else {
-      if (log) console.log(`dispatching ${action.type}`)
-      const state = reducer(getState(), action)
-      store.history = [...store.history.slice(0, store.historyIndex + 1), state]
-      store.actionHistory = [...store.actionHistory.slice(0, store.historyIndex + 1), {
-        type: action.type, effectData: action.effectData
-      }]
-      store.historyIndex++
-      forwardEffect(true)
-      if (useLocalStorage) updateLocalHistory()
-      if (log) console.log(`history index: ${store.historyIndex}`)
-      window.dispatchEvent(new CustomEvent<DispatchEvent<RootState>>('dispatch', {
-        detail: {
-          prevState: getPrevState(),
-          nextState: getState(),
-        }
-      }))
+  function dispatch(action?: Action) {
+    if (action) {
+      if (log) console.log(`dispatching ${action.type}`);
+      const state = reducer(getState(), action);
+      store.history = [
+        ...store.history.slice(0, store.historyIndex + 1),
+        state,
+      ];
+      store.actionHistory = [
+        ...store.actionHistory.slice(0, store.historyIndex + 1),
+        {
+          type: action.type,
+          effectData: action.effectData,
+        },
+      ];
+      store.historyIndex++;
+      forwardEffect(true);
+      if (useLocalStorage) updateLocalHistory();
+      if (log) console.log(`history index: ${store.historyIndex}`);
+      window.dispatchEvent(
+        new CustomEvent<DispatchEvent<RootState>>("dispatch", {
+          detail: {
+            prevState: getPrevState(),
+            nextState: getState(),
+          },
+        })
+      );
     }
   }
 

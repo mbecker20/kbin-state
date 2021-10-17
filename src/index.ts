@@ -65,8 +65,6 @@ export type StaticStoreOptions = {
   localStorageKey?: string
 }
 
-export type ThunkAction = (dispatch: Dispatch) => Promise<any | void>
-
 export type Reducer<RootState, ReturnState> = (state: RootState, action: any) => ReturnState
 export type RootReducer<RootState> = (state?: RootState, action?: Action) => RootState
 
